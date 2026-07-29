@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" class="overflow-x-hidden">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wait! One Last Thing — Sketch Se Pyaar</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body{font-family:'Outfit',sans-serif;}
+  .hand{font-family:'Kalam',cursive;}
+  @keyframes floating{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+  .animate-float{animation:floating 3s ease-in-out infinite;}
+  .reel-wrap{
+    width:min(78vw,300px);
+    aspect-ratio:9/16;
+    border-radius:22px;
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 25px 60px -15px rgba(0,0,0,0.35);
+    border:6px solid #1E1B18;
+    background:#111;
+  }
+  .reel-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
+  .pulse-dot{
+    width:10px;height:10px;border-radius:50%;background:#EF4444;
+    box-shadow:0 0 0 rgba(239,68,68,0.6); animation:pulse-ring 1.8s infinite;
+  }
+  @keyframes pulse-ring{
+    0%{box-shadow:0 0 0 0 rgba(239,68,68,0.55);}
+    70%{box-shadow:0 0 0 10px rgba(239,68,68,0);}
+    100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}
+  }
+</style>
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', 'REPLACE_WITH_YOUR_META_PIXEL_ID');
+fbq('track', 'PageView');
+
+// This page loads right after the main sketch order is paid for on Cosmofeed,
+// so the order Purchase event fires here.
+// Pass the paid amount in the redirect URL as ?amt=99 (etc.) from Cosmofeed's
+// "redirect after payment" setting if it supports query params — otherwise
+// this falls back to a default value. Update ORDER_VALUE_FALLBACK per link if needed.
+(function(){
+  var ORDER_VALUE_FALLBACK = 99;
+  var params = new URLSearchParams(window.location.search);
+  var amt = parseFloat(params.get('amt')) || ORDER_VALUE_FALLBACK;
+  fbq('track', 'Purchase', { value: amt, currency: 'INR' });
+})();
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=REPLACE_WITH_YOUR_META_PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
+</head>
+
+<body class="overflow-x-hidden bg-[#FBF6EC] text-[#2E2A26] selection:bg-[#B4586A] selection:text-white">
+
+<section class="relative pt-10 md:pt-16 pb-16 px-6 min-h-screen flex flex-col items-center overflow-hidden">
+  <div class="absolute -top-24 -right-24 w-96 h-96 bg-[#B4586A]/10 rounded-full blur-3xl"></div>
+  <div class="absolute top-1/3 -left-24 w-80 h-80 bg-[#A9823C]/10 rounded-full blur-3xl"></div>
+
+  <div class="max-w-lg mx-auto text-center relative z-10">
+
+    <div class="inline-flex items-center gap-2 bg-green-500/10 text-green-600 px-5 py-2 rounded-full text-sm font-bold border border-green-500/20 shadow-lg mb-6">
+      <i data-lucide="check-circle" class="w-4 h-4"></i>
+      <span>ORDER CONFIRMED</span>
+    </div>
+
+    <h1 class="text-3xl md:text-4xl font-black leading-tight">
+      Wait — want it <span class="hand text-[#B4586A]">framed &amp; delivered</span> too?
+    </h1>
+    <p class="text-[15px] md:text-base text-[#57524A] mt-4 max-w-md mx-auto">
+      Skip the print shop. We'll print your sketch on premium art paper, frame it, and hand-deliver it to your door — ready to gift.
+    </p>
+
+    <!-- Reel-style video, NOT full-screen -->
+    <div class="reel-wrap mx-auto mt-8 animate-float">
+      <video autoplay muted loop playsinline poster="">
+        <source src="REPLACE_WITH_YOUR_REEL_VIDEO.mp4" type="video/mp4">
+      </video>
+      <div class="absolute top-3 left-3 flex items-center gap-2 bg-black/40 backdrop-blur px-3 py-1.5 rounded-full">
+        <span class="pulse-dot"></span>
+        <span class="text-white text-[11px] font-bold uppercase tracking-wide">Framed &amp; ready</span>
+      </div>
+    </div>
+
+    <div class="mt-8 bg-white rounded-3xl border-2 border-[#B4586A]/20 p-6 shadow-xl shadow-[#B4586A]/5">
+      <div class="flex items-center justify-center gap-3 mb-2">
+        <span class="text-3xl font-black">₹399</span>
+        <span class="text-sm text-[#57524A]">one-time add-on</span>
+      </div>
+      <ul class="text-sm text-[#57524A] text-left max-w-xs mx-auto space-y-2 mt-3">
+        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 shrink-0"></i>Premium print on art-grade paper</li>
+        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 shrink-0"></i>Ready-to-hang photo frame included</li>
+        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 shrink-0"></i>Delivered to your doorstep</li>
+      </ul>
+    </div>
+
+    <div class="mt-8 flex flex-col gap-3 max-w-xs mx-auto">
+      <a href="#REPLACE_COSMOFEED_UPSELL_399"
+         id="yes-btn"
+         class="bg-[#2E2A26] text-white px-8 py-4 rounded-2xl font-bold text-[15px] shadow-xl hover:scale-[1.03] transition-transform">
+        Yes, deliver my framed print — ₹399
+      </a>
+      <a href="thankyou.html"
+         class="text-[#57524A] px-8 py-3 rounded-2xl font-semibold text-sm border border-[#D2C3A0] hover:bg-white transition-colors">
+        No thanks, I'll print it myself
+      </a>
+    </div>
+
+    <p class="text-[12px] text-[#8A8377] mt-6">You'll be redirected to complete this add-on payment securely.</p>
+  </div>
+</section>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>

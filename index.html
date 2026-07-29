@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SketchNote — Turn Their Photo Into a Sketch They'll Frame Forever</title>
+<meta name="description" content="Custom pencil and colour sketch portraits made from your photo. Delivered as a print-ready PDF on WhatsApp within 24 hours.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:        #FAF6EE;
+  --paper-2:      #F1E9D8;
+  --card:         #FFFFFF;
+  --graphite:     #262220;
+  --graphite-2:   #3A332E;
+  --ink-mid:      #6B5F55;
+  --ink-lite:     #A0917F;
+  --crimson:      #B3122E;
+  --crimson-deep: #8C0E23;
+  --crimson-pale: #FBE9EC;
+  --gold:         #C9972A;
+  --gold-deep:    #A87A18;
+  --gold-pale:    #FBF1DA;
+  --sage:         #4C7A57;
+  --sage-pale:    #E9F1EA;
+  --line:         rgba(38,34,32,0.12);
+  --shadow-card:  0 2px 18px rgba(38,34,32,0.10), 0 1px 4px rgba(38,34,32,0.06);
+  --shadow-lift:  0 18px 44px -14px rgba(179,18,46,0.30), 0 6px 18px rgba(38,34,32,0.10);
+  --r-xl: 26px; --r-lg: 18px; --r-md: 12px; --r-sm: 8px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-hand: 'Caveat', cursive;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--paper); color: var(--graphite);
+  font-family: var(--font-body); -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+.eyebrow {
+  font-family: var(--font-hand); font-size: 20px; font-weight: 600;
+  color: var(--crimson); display: inline-flex; align-items: center; gap: 8px;
+}
+.eyebrow::before { content: '✎'; font-size: 18px; }
+.section { padding: 84px 20px; }
+.section-head { text-align: center; max-width: 640px; margin: 0 auto 44px; }
+.section-title { font-family: var(--font-display); font-size: clamp(26px, 4vw, 38px); font-weight: 600; line-height: 1.2; color: var(--graphite); margin: 10px 0 12px; }
+.section-sub { font-size: 15.5px; color: var(--ink-mid); line-height: 1.7; }
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  background: var(--crimson); color: #fff; border: none; border-radius: 100px;
+  padding: 16px 30px; font-family: var(--font-body); font-weight: 700; font-size: 15.5px;
+  cursor: pointer; text-decoration: none; box-shadow: var(--shadow-lift);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 22px 50px -14px rgba(179,18,46,0.4); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: transparent; color: var(--graphite); border: 1.5px solid var(--line);
+  border-radius: 100px; padding: 14px 26px; font-family: var(--font-body); font-weight: 700;
+  font-size: 14.5px; cursor: pointer; text-decoration: none; transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover { border-color: var(--crimson); color: var(--crimson); }
+
+/* ══════ NAV ══════ */
+.nav {
+  position: sticky; top: 0; z-index: 500;
+  background: rgba(250,246,238,0.9); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.nav-inner { max-width: 1120px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-family: var(--font-display); font-size: 21px; font-weight: 700; color: var(--graphite); text-decoration: none; }
+.nav-logo span { color: var(--crimson); }
+.nav-cta {
+  display: inline-flex; align-items: center; gap: 7px; background: var(--graphite); color: #fff;
+  border-radius: 100px; padding: 9px 16px; font-size: 13px; font-weight: 700; text-decoration: none;
+}
+
+/* ══════ HERO ══════ */
+.hero { background: var(--graphite); color: #fff; padding: 56px 20px 0; position: relative; overflow: hidden; }
+.hero::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.05;
+  background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.hero-grid { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 50px; align-items: center; position: relative; z-index: 1; }
+.hero-copy .eyebrow { color: var(--gold); }
+.hero-copy .eyebrow::before { content: '✎'; }
+.hero-title {
+  font-family: var(--font-display); font-size: clamp(32px, 4.6vw, 50px); line-height: 1.12;
+  font-weight: 600; margin: 14px 0 6px; letter-spacing: -0.01em;
+}
+.hero-underline { display: block; width: 220px; max-width: 60%; height: 14px; margin-top: -6px; margin-bottom: 18px; }
+.hero-underline path { stroke: var(--crimson); stroke-width: 5; fill: none; stroke-linecap: round; stroke-dasharray: 320; stroke-dashoffset: 320; animation: lsDraw 1.1s 0.4s ease forwards; }
+@keyframes lsDraw { to { stroke-dashoffset: 0; } }
+.hero-sub { font-size: 16px; color: rgba(255,255,255,0.72); line-height: 1.7; max-width: 460px; margin-bottom: 26px; }
+.hero-trustrow { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+.hero-avatars { display: flex; }
+.hero-avatars span {
+  width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--graphite);
+  margin-left: -10px; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; color: #fff;
+}
+.hero-avatars span:first-child { margin-left: 0; }
+.hero-trust-text { font-size: 13.5px; color: rgba(255,255,255,0.65); }
+.hero-trust-text b { color: #fff; }
+
+/* Framed sketch mockup */
+.hero-art { position: relative; display: flex; align-items: center; justify-content: center; }
+.frame {
+  background: linear-gradient(155deg, #8a6a3f, #5c4326 65%, #3e2d19);
+  padding: 16px; border-radius: 10px; box-shadow: 0 30px 70px -20px rgba(0,0,0,0.55);
+  width: min(360px, 100%); transform: rotate(-2deg);
+}
+.frame-inner { background: var(--paper); border-radius: 4px; padding: 26px 22px 30px; position: relative; overflow: hidden; }
+.frame-inner svg { width: 100%; height: auto; transition: filter 0.5s ease; }
+.frame-inner.is-pencil svg { filter: grayscale(1) contrast(1.05); }
+.frame-inner.is-colour svg { filter: grayscale(0) saturate(1.15); }
+.frame-caption { font-family: var(--font-hand); font-size: 17px; color: var(--ink-mid); text-align: center; margin-top: 10px; }
+.frame-badge {
+  position: absolute; top: -14px; right: -14px; background: var(--crimson); color: #fff;
+  width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 12px; text-align: center; line-height: 1.2;
+  box-shadow: var(--shadow-lift); transform: rotate(8deg);
+}
+
+/* ══════ ORDER CARD ══════ */
+.order-wrap { max-width: 1120px; margin: -60px auto 0; padding: 0 20px; position: relative; z-index: 5; }
+.order-card {
+  background: var(--card); border-radius: var(--r-xl); box-shadow: var(--shadow-card);
+  padding: 30px 26px 26px; max-width: 460px; margin: 0 auto;
+}
+.order-thumb { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.order-thumb-icon {
+  width: 52px; height: 52px; border-radius: 12px; background: var(--gold-pale);
+  display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
+}
+.order-title { font-family: var(--font-display); font-size: 21px; font-weight: 600; color: var(--graphite); line-height: 1.25; }
+.order-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.order-stars { color: #F0A93A; font-size: 15px; letter-spacing: 1.5px; }
+.order-rating-text { font-size: 13px; color: var(--ink-mid); font-weight: 600; }
+.order-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+.order-price-now { font-family: var(--font-body); font-size: 32px; font-weight: 800; color: var(--graphite); line-height: 1; }
+.order-price-was { font-size: 16px; color: var(--ink-lite); text-decoration: line-through; }
+.order-price-badge {
+  background: var(--crimson); color: #fff; font-size: 11.5px; font-weight: 800; padding: 4px 10px;
+  border-radius: 100px; letter-spacing: 0.02em; display: inline-block; transform: rotate(-3deg);
+  transition: transform 0.25s;
+}
+.order-price-badge.stamp { animation: lsStamp 0.4s ease; }
+@keyframes lsStamp { 0% { transform: rotate(-3deg) scale(0.6); opacity: 0; } 60% { transform: rotate(-3deg) scale(1.15); opacity: 1; } 100% { transform: rotate(-3deg) scale(1); } }
+.order-price-note { font-size: 12.5px; color: var(--ink-mid); margin-bottom: 22px; }
+
+.variant-group { margin-bottom: 18px; }
+.variant-label { font-size: 11px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-lite); margin-bottom: 10px; }
+.variant-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.variant-pill {
+  flex: 1; min-width: 108px; border: 1.5px solid var(--line); background: var(--paper);
+  border-radius: var(--r-md); padding: 12px 10px; text-align: center; cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, transform 0.15s;
+}
+.variant-pill:hover { transform: translateY(-1px); }
+.variant-pill .vp-emoji { font-size: 19px; display: block; margin-bottom: 4px; }
+.variant-pill .vp-label { font-size: 13px; font-weight: 700; color: var(--graphite); display: block; }
+.variant-pill .vp-sub { font-size: 10.5px; color: var(--ink-lite); display: block; margin-top: 2px; }
+.variant-pill.active { border-color: var(--crimson); background: var(--crimson-pale); }
+.variant-pill.active .vp-label { color: var(--crimson-deep); }
+
+.upload-box {
+  border: 1.5px dashed var(--line); border-radius: var(--r-md); padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px; cursor: pointer;
+  transition: border-color 0.18s, background 0.18s;
+}
+.upload-box:hover { border-color: var(--crimson); background: var(--crimson-pale); }
+.upload-box.done { border-style: solid; border-color: #B8D9A8; background: var(--sage-pale); cursor: default; }
+.upload-icon {
+  width: 38px; height: 38px; border-radius: 50%; background: var(--paper-2); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 17px; overflow: hidden;
+}
+.upload-icon img { width: 100%; height: 100%; object-fit: cover; }
+.upload-text-title { font-size: 13px; font-weight: 700; color: var(--graphite); }
+.upload-text-sub { font-size: 11.5px; color: var(--ink-mid); margin-top: 1px; }
+.upload-progress { height: 4px; border-radius: 4px; background: var(--line); margin-top: 6px; overflow: hidden; display: none; }
+.upload-progress.show { display: block; }
+.upload-progress-fill { height: 100%; width: 0%; background: var(--crimson); border-radius: 4px; transition: width 1s ease; }
+
+.order-buy-btn {
+  width: 100%; background: var(--crimson); color: #fff; border: none; border-radius: var(--r-lg);
+  padding: 17px; font-family: var(--font-body); font-weight: 800; font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: var(--shadow-lift); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none;
+}
+.order-buy-btn:hover { transform: translateY(-2px); }
+.order-reassure { text-align: center; font-size: 11.5px; color: var(--ink-lite); margin-top: 10px; }
+
+/* ══════ TRUST MARQUEE ══════ */
+.marquee-wrap { overflow: hidden; padding: 30px 0; border-bottom: 1px solid var(--line); background: var(--paper-2); }
+.marquee-track { display: flex; gap: 46px; width: max-content; animation: lsMarquee 22s linear infinite; }
+@keyframes lsMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-item { display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 700; color: var(--ink-mid); white-space: nowrap; }
+.marquee-item .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--crimson); }
+
+/* ══════ GALLERY ══════ */
+.gallery-outer { border-radius: var(--r-xl); overflow: hidden; position: relative; box-shadow: var(--shadow-card); background: var(--card); }
+.gallery-track { display: flex; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
+.gallery-slide { min-width: 100%; aspect-ratio: 16/10; position: relative; overflow: hidden; background: var(--paper-2); }
+.gallery-slide img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-slide .gplaceholder {
+  width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  background: linear-gradient(155deg, var(--paper-2), var(--gold-pale));
+}
+.gplaceholder-disc { width: 76px; height: 76px; border-radius: 50%; background: var(--gold); opacity: 0.7; display: flex; align-items: center; justify-content: center; font-size: 30px; }
+.gplaceholder p { font-size: 12.5px; color: var(--ink-mid); font-weight: 600; }
+.gallery-tag { position: absolute; top: 14px; left: 14px; background: rgba(38,34,32,0.75); color: #fff; font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 100px; letter-spacing: 0.03em; }
+.gallery-dots { display: flex; justify-content: center; gap: 7px; margin-top: 16px; }
+.gdot { width: 7px; height: 7px; border-radius: 50%; background: var(--line); border: none; cursor: pointer; padding: 0; transition: all 0.22s; }
+.gdot.active { background: var(--crimson); width: 20px; border-radius: 4px; }
+.gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border-radius: 50%; border: none; background: rgba(255,255,255,0.85); color: var(--graphite); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2; box-shadow: 0 2px 10px rgba(0,0,0,0.18); }
+.gallery-arrow.prev { left: 14px; } .gallery-arrow.next { right: 14px; }
+
+/* ══════ STEPS ══════ */
+.steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+.step-card { text-align: center; }
+.step-num { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--crimson); margin-bottom: 10px; }
+.step-icon { width: 60px; height: 60px; border-radius: 50%; background: var(--crimson-pale); display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 14px; }
+.step-title { font-size: 15.5px; font-weight: 800; color: var(--graphite); margin-bottom: 6px; }
+.step-text { font-size: 13px; color: var(--ink-mid); line-height: 1.6; }
+
+/* ══════ WHY GRID ══════ */
+.why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.why-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px 20px; transition: box-shadow 0.25s, transform 0.25s; }
+.why-card:hover { box-shadow: var(--shadow-card); transform: translateY(-3px); }
+.why-icon { font-size: 26px; margin-bottom: 12px; }
+.why-title { font-size: 14.5px; font-weight: 800; color: var(--graphite); margin-bottom: 6px; }
+.why-text { font-size: 12.5px; color: var(--ink-mid); line-height: 1.6; }
+
+/* ══════ PRICING GRID ══════ */
+.pricing-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; }
+.ptab { border: 1.5px solid var(--line); background: var(--card); border-radius: 100px; padding: 10px 22px; font-weight: 800; font-size: 13.5px; cursor: pointer; color: var(--ink-mid); transition: all 0.18s; }
+.ptab.active { background: var(--graphite); border-color: var(--graphite); color: #fff; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.pricing-grid.hidden { display: none; }
+.price-card { background: var(--card); border: 1.5px solid var(--line); border-radius: var(--r-lg); padding: 24px 20px; text-align: center; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+.price-card:hover { border-color: var(--crimson); transform: translateY(-3px); box-shadow: var(--shadow-card); }
+.price-card.popular { border-color: var(--gold); position: relative; }
+.price-card .pc-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: #fff; font-size: 10.5px; font-weight: 800; padding: 4px 12px; border-radius: 100px; white-space: nowrap; }
+.pc-faces { font-size: 13px; font-weight: 700; color: var(--ink-mid); margin-bottom: 10px; }
+.pc-now { font-family: var(--font-display); font-size: 30px; font-weight: 700; color: var(--graphite); }
+.pc-was { font-size: 14px; color: var(--ink-lite); text-decoration: line-through; margin-left: 6px; }
+.pc-save { font-size: 12px; font-weight: 700; color: var(--sage); margin: 6px 0 16px; }
+.pc-btn { display: block; width: 100%; background: var(--graphite); color: #fff; border: none; border-radius: var(--r-md); padding: 11px; font-weight: 700; font-size: 13.5px; cursor: pointer; text-decoration: none; }
+.pc-btn:hover { background: var(--crimson); }
+
+/* ══════ TESTIMONIALS ══════ */
+.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.testi-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px; }
+.testi-stars { color: #F0A93A; font-size: 13px; letter-spacing: 1.5px; margin-bottom: 10px; }
+.testi-text { font-size: 13.5px; color: var(--graphite); line-height: 1.65; margin-bottom: 14px; }
+.testi-name-row { display: flex; align-items: center; gap: 9px; }
+.testi-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--crimson-pale); color: var(--crimson-deep); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+.testi-name { font-size: 13px; font-weight: 700; color: var(--graphite); }
+.testi-role { font-size: 11px; color: var(--ink-lite); }
+
+/* ══════ FAQ ══════ */
+.faq-list { display: flex; flex-direction: column; gap: 10px; max-width: 720px; margin: 0 auto; }
+.faq-item { background: var(--card); border: 1.5px solid var(--line); border-radius: var(--r-lg); overflow: hidden; transition: border-color 0.2s; }
+.faq-item.open { border-color: var(--crimson); }
+.faq-btn { width: 100%; background: none; border: none; padding: 17px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; text-align: left; font-family: var(--font-body); }
+.faq-q { font-size: 14.5px; font-weight: 700; color: var(--graphite); }
+.faq-icon { width: 26px; height: 26px; border-radius: 50%; background: var(--crimson-pale); color: var(--crimson); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; transition: transform 0.3s, background 0.2s, color 0.2s; }
+.faq-item.open .faq-icon { background: var(--crimson); color: #fff; transform: rotate(45deg); }
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.faq-item.open .faq-answer { max-height: 260px; }
+.faq-inner { padding: 0 18px 18px; font-size: 13.5px; color: var(--ink-mid); line-height: 1.7; border-top: 1px solid var(--line); padding-top: 12px; }
+
+/* ══════ FINAL CTA ══════ */
+.final-cta { background: var(--graphite); color: #fff; text-align: center; padding: 70px 20px; }
+.final-cta h2 { font-family: var(--font-display); font-size: clamp(26px,4vw,36px); margin-bottom: 14px; }
+.final-cta p { color: rgba(255,255,255,0.7); font-size: 15px; margin-bottom: 30px; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+
+/* ══════ FOOTER ══════ */
+.footer { background: var(--paper-2); border-top: 1px solid var(--line); padding: 46px 20px 26px; }
+.footer-inner { max-width: 420px; margin: 0 auto; text-align: center; }
+.footer-logo { font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+.footer-logo span { color: var(--crimson); }
+.footer-tagline { font-size: 13px; color: var(--ink-mid); margin-bottom: 26px; line-height: 1.6; }
+.footer-links { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 20px; }
+.footer-links a { color: var(--ink-mid); text-decoration: none; font-size: 13px; font-weight: 600; }
+.footer-links a:hover { color: var(--crimson); }
+.footer-contact { font-size: 13.5px; color: var(--ink-mid); margin-bottom: 20px; }
+.footer-contact a { color: var(--crimson); font-weight: 700; text-decoration: none; }
+.footer-pay { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-bottom: 20px; }
+.footer-pay span { background: var(--card); border: 1px solid var(--line); border-radius: 7px; padding: 6px 10px; font-size: 10.5px; font-weight: 700; color: var(--ink-mid); }
+.footer-divider { height: 1px; background: var(--line); margin-bottom: 16px; }
+.footer-copy { font-size: 11.5px; color: var(--ink-lite); }
+
+/* ══════ WHATSAPP FLOAT ══════ */
+.wa-float {
+  position: fixed; right: 20px; bottom: 20px; z-index: 9999; width: 58px; height: 58px;
+  border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(37,211,102,0.45); text-decoration: none; transition: transform 0.2s;
+  animation: waBreathe 3.2s ease-in-out infinite;
+}
+.wa-float:hover { transform: scale(1.06); }
+@keyframes waBreathe { 0%,100% { box-shadow: 0 4px 14px rgba(37,211,102,0.4); } 50% { box-shadow: 0 4px 22px rgba(37,211,102,0.75); } }
+.wa-float svg { width: 30px; height: 30px; }
+
+/* ══════ STICKY MOBILE BUY BAR ══════ */
+.sticky-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 900; background: var(--card);
+  border-top: 1px solid var(--line); padding: 12px 16px; display: none;
+  align-items: center; justify-content: space-between; gap: 12px;
+  box-shadow: 0 -6px 20px rgba(0,0,0,0.08);
+}
+.sticky-bar-price { display: flex; flex-direction: column; }
+.sticky-bar-price .now { font-size: 19px; font-weight: 800; color: var(--graphite); }
+.sticky-bar-price .was { font-size: 11.5px; color: var(--ink-lite); text-decoration: line-through; }
+.sticky-bar-btn { background: var(--crimson); color: #fff; border: none; border-radius: 100px; padding: 12px 24px; font-weight: 800; font-size: 14px; cursor: pointer; text-decoration: none; }
+
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-art { order: -1; }
+  .steps-grid { grid-template-columns: repeat(2, 1fr); }
+  .why-grid { grid-template-columns: 1fr 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .order-wrap { margin-top: -40px; }
+  .sticky-bar { display: flex; }
+  body { padding-bottom: 74px; }
+}
+@media (max-width: 480px) {
+  .section { padding: 60px 16px; }
+  .variant-pill { min-width: 90px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Sketch<span>Note</span></a>
+    <a href="https://wa.me/919111370819?text=Hi%20SketchNote%2C%20I%20have%20a%20question" class="nav-cta" target="_blank" rel="noopener noreferrer">💬 WhatsApp us</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-grid wrap">
+    <div class="hero-copy">
+      <span class="eyebrow">Made from your photo</span>
+      <h1 class="hero-title">Turn Their Photo Into a Sketch They'll Frame Forever</h1>
+      <svg class="hero-underline" viewBox="0 0 220 14"><path d="M4 9 C 50 2, 100 13, 140 6 S 200 3, 216 8"/></svg>
+      <p class="hero-sub">A custom pencil or colour sketch portrait, delivered as a print-ready PDF on WhatsApp — within 24 hours. Print it, frame it, gift it.</p>
+      <div class="hero-trustrow">
+        <div class="hero-avatars">
+          <span style="background:#B3122E;">A</span>
+          <span style="background:#C9972A;">R</span>
+          <span style="background:#4C7A57;">S</span>
+          <span style="background:#6B5F55;">+</span>
+        </div>
+        <span class="hero-trust-text"><b>1,800+</b> happy customers · <b>★ 4.9</b> rating</span>
+      </div>
+    </div>
+
+    <div class="hero-art">
+      <div class="frame">
+        <div class="frame-inner is-pencil" id="heroFrameInner">
+          <div class="frame-badge">24 HR<br>DELIVERY</div>
+          <svg viewBox="0 0 240 260" id="heroSketchSvg">
+            <ellipse cx="120" cy="120" rx="72" ry="88" fill="#EFE2CE" stroke="#B3122E" stroke-width="2.5"/>
+            <path d="M60 150 Q120 250 180 150" fill="#EFE2CE" stroke="#B3122E" stroke-width="2.5"/>
+            <circle cx="92" cy="112" r="6" fill="#262220"/>
+            <circle cx="148" cy="112" r="6" fill="#262220"/>
+            <path d="M84 92 Q92 84 102 90" fill="none" stroke="#262220" stroke-width="3" stroke-linecap="round"/>
+            <path d="M138 90 Q148 84 156 92" fill="none" stroke="#262220" stroke-width="3" stroke-linecap="round"/>
+            <path d="M108 128 Q120 138 132 128" fill="none" stroke="#262220" stroke-width="3" stroke-linecap="round"/>
+            <path d="M96 145 Q120 158 144 145" fill="none" stroke="#B3122E" stroke-width="3" stroke-linecap="round"/>
+            <path d="M50 90 Q30 130 55 175" fill="none" stroke="#262220" stroke-width="2"/>
+            <path d="M190 90 Q210 130 185 175" fill="none" stroke="#262220" stroke-width="2"/>
+          </svg>
+          <p class="frame-caption">✏️ your sketch, your way</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ORDER CARD -->
+<div class="order-wrap">
+  <div class="order-card">
+    <div class="order-thumb">
+      <div class="order-thumb-icon">🖼️</div>
+      <div class="order-title">Custom Sketch Portrait</div>
+    </div>
+
+    <div class="order-rating">
+      <span class="order-stars">★★★★★</span>
+      <span class="order-rating-text">4.9 · 1,800+ customers</span>
+    </div>
+
+    <div class="order-price-row">
+      <span class="order-price-was" id="priceWas">₹198</span>
+      <span class="order-price-now" id="priceNow">₹99</span>
+      <span class="order-price-badge" id="priceBadge">50% OFF</span>
+    </div>
+    <p class="order-price-note">Includes print-ready PDF · Delivered on WhatsApp</p>
+
+    <div class="variant-group">
+      <p class="variant-label">Sketch type</p>
+      <div class="variant-pills" id="typePills">
+        <div class="variant-pill active" data-type="pencil">
+          <span class="vp-emoji">✏️</span>
+          <span class="vp-label">Pencil</span>
+          <span class="vp-sub">Classic graphite</span>
+        </div>
+        <div class="variant-pill" data-type="colour">
+          <span class="vp-emoji">🎨</span>
+          <span class="vp-label">Colour</span>
+          <span class="vp-sub">Full colour</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="variant-group">
+      <p class="variant-label">Number of faces</p>
+      <div class="variant-pills" id="facePills">
+        <div class="variant-pill active" data-faces="1">
+          <span class="vp-label">1 Face</span>
+        </div>
+        <div class="variant-pill" data-faces="2">
+          <span class="vp-label">2 Faces</span>
+        </div>
+        <div class="variant-pill" data-faces="3plus">
+          <span class="vp-label">3+ Faces</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="upload-box" id="uploadBox" onclick="document.getElementById('sketchFileInput').click()">
+      <div class="upload-icon" id="uploadIcon">📷</div>
+      <div style="flex:1;">
+        <div class="upload-text-title" id="uploadTitle">Add your photo (optional)</div>
+        <div class="upload-text-sub" id="uploadSub">Just a preview — we'll confirm it on WhatsApp after payment</div>
+        <div class="upload-progress" id="uploadProgress"><div class="upload-progress-fill" id="uploadProgressFill"></div></div>
+      </div>
+    </div>
+    <input type="file" id="sketchFileInput" accept="image/*" hidden>
+
+    <a href="#" class="order-buy-btn" id="buyNowBtn" target="_blank" rel="noopener noreferrer">
+      Buy Now — <span id="buyBtnPrice">₹99</span>
+    </a>
+    <p class="order-reassure">🔒 Secure payment · We'll ask for your photo on WhatsApp after checkout</p>
+  </div>
+</div>
+
+<!-- TRUST MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack">
+    <span class="marquee-item"><span class="dot"></span>Sketched from your photo</span>
+    <span class="marquee-item"><span class="dot"></span>24-hour delivery</span>
+    <span class="marquee-item"><span class="dot"></span>Delivered on WhatsApp</span>
+    <span class="marquee-item"><span class="dot"></span>Print-ready PDF</span>
+    <span class="marquee-item"><span class="dot"></span>Frame it & gift it</span>
+    <span class="marquee-item"><span class="dot"></span>1,800+ happy customers</span>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section class="section" id="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Our work</span>
+      <h2 class="section-title">See the transformation</h2>
+      <p class="section-sub">A few of the sketches we've made for customers just like you.</p>
+    </div>
+    <div class="gallery-outer">
+      <div class="gallery-track" id="galleryTrack">
+        <!-- Replace each src below with your own showcase image (6 total) -->
+        <div class="gallery-slide"><img src="images/sketch-1.jpg" alt="Sketch sample 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🖼️</div><p>Add sketch-1.jpg to /images</p></div><span class="gallery-tag">Pencil · 1 Face</span></div>
+        <div class="gallery-slide"><img src="images/sketch-2.jpg" alt="Sketch sample 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🖼️</div><p>Add sketch-2.jpg to /images</p></div><span class="gallery-tag">Colour · 1 Face</span></div>
+        <div class="gallery-slide"><img src="images/sketch-3.jpg" alt="Sketch sample 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🖼️</div><p>Add sketch-3.jpg to /images</p></div><span class="gallery-tag">Pencil · 2 Faces</span></div>
+        <div class="gallery-slide"><img src="images/sketch-4.jpg" alt="Sketch sample 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🖼️</div><p>Add sketch-4.jpg to /images</p></div><span class="gallery-tag">Colour · 2 Faces</span></div>
+        <div class="gallery-slide"><img src="images/sketch-5.jpg" alt="Sketch sample 5" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🖼️</div><p>Add sketch-5.jpg to /images</p></div><span class="gallery-tag">Pencil · Family</span></div>
+        <div class="gallery-slide"><img src="images/sketch-6.jpg" alt="Sketch sample 6" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🖼️</div><p>Add sketch-6.jpg to /images</p></div><span class="gallery-tag">Colour · Family</span></div>
+      </div>
+      <button class="gallery-arrow prev" id="galPrev" aria-label="Previous">‹</button>
+      <button class="gallery-arrow next" id="galNext" aria-label="Next">›</button>
+    </div>
+    <div class="gallery-dots" id="galleryDots"></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" style="background:var(--paper-2);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">The process</span>
+      <h2 class="section-title">From photo to frame in 4 steps</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">🛒</div>
+        <div class="step-title">Choose & pay</div>
+        <div class="step-text">Pick your sketch type and number of faces, then complete payment.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">💬</div>
+        <div class="step-title">Send your photo</div>
+        <div class="step-text">We'll message you on WhatsApp right after payment to confirm the photo.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">🎨</div>
+        <div class="step-title">We sketch it</div>
+        <div class="step-text">Your portrait is prepared within 24 hours of confirming the photo.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-icon">🖨️</div>
+        <div class="step-title">Print & gift</div>
+        <div class="step-text">Receive a print-ready PDF on WhatsApp — print, frame, and gift it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Why SketchNote</span>
+      <h2 class="section-title">A gift that feels personal</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">🖼️</div><div class="why-title">Made from your photo</div><div class="why-text">Every sketch is created specifically from the photo you share with us.</div></div>
+      <div class="why-card"><div class="why-icon">⏱️</div><div class="why-title">24-hour delivery</div><div class="why-text">Your finished sketch is ready within 24 hours of confirming your photo.</div></div>
+      <div class="why-card"><div class="why-icon">📄</div><div class="why-title">Print-ready PDF</div><div class="why-text">High-resolution file, ready to print at any shop or frame at home.</div></div>
+      <div class="why-card"><div class="why-icon">💬</div><div class="why-title">WhatsApp delivery</div><div class="why-text">No apps, no logins. Everything happens over a simple WhatsApp chat.</div></div>
+      <div class="why-card"><div class="why-icon">👨‍👩‍👧</div><div class="why-title">Any number of faces</div><div class="why-text">Solo portraits, couples, or the whole family — priced simply by face count.</div></div>
+      <div class="why-card"><div class="why-icon">🎁</div><div class="why-title">Perfect for gifting</div><div class="why-text">Anniversaries, birthdays, parents' day — a keepsake worth framing.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING RECAP -->
+<section class="section" style="background:var(--paper-2);" id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Simple pricing</span>
+      <h2 class="section-title">Priced by number of faces</h2>
+      <p class="section-sub">No hidden charges. Pick your sketch type and pay once.</p>
+    </div>
+
+    <div class="pricing-tabs">
+      <button class="ptab active" id="ptabPencil" onclick="lsSwitchPriceTab('pencil')">✏️ Pencil Sketch</button>
+      <button class="ptab" id="ptabColour" onclick="lsSwitchPriceTab('colour')">🎨 Colour Sketch</button>
+    </div>
+
+    <div class="pricing-grid" id="pricingGridPencil">
+      <div class="price-card popular">
+        <span class="pc-badge">MOST POPULAR</span>
+        <div class="pc-faces">1 Face</div>
+        <div><span class="pc-now">₹99</span><span class="pc-was">₹198</span></div>
+        <div class="pc-save">Save 50%</div>
+        <a href="#" class="pc-btn" data-buy="pencil_1">Buy now</a>
+      </div>
+      <div class="price-card">
+        <div class="pc-faces">2 Faces</div>
+        <div><span class="pc-now">₹149</span><span class="pc-was">₹298</span></div>
+        <div class="pc-save">Save 50%</div>
+        <a href="#" class="pc-btn" data-buy="pencil_2">Buy now</a>
+      </div>
+      <div class="price-card">
+        <div class="pc-faces">3+ Faces</div>
+        <div><span class="pc-now">₹199</span><span class="pc-was">₹398</span></div>
+        <div class="pc-save">Save 50%</div>
+        <a href="#" class="pc-btn" data-buy="pencil_3plus">Buy now</a>
+      </div>
+    </div>
+
+    <div class="pricing-grid hidden" id="pricingGridColour">
+      <div class="price-card popular">
+        <span class="pc-badge">MOST POPULAR</span>
+        <div class="pc-faces">1 Face</div>
+        <div><span class="pc-now">₹149</span><span class="pc-was">₹298</span></div>
+        <div class="pc-save">Save 50%</div>
+        <a href="#" class="pc-btn" data-buy="colour_1">Buy now</a>
+      </div>
+      <div class="price-card">
+        <div class="pc-faces">2 Faces</div>
+        <div><span class="pc-now">₹199</span><span class="pc-was">₹398</span></div>
+        <div class="pc-save">Save 50%</div>
+        <a href="#" class="pc-btn" data-buy="colour_2">Buy now</a>
+      </div>
+      <div class="price-card">
+        <div class="pc-faces">3+ Faces</div>
+        <div><span class="pc-now">₹249</span><span class="pc-was">₹498</span></div>
+        <div class="pc-save">Save 50%</div>
+        <a href="#" class="pc-btn" data-buy="colour_3plus">Buy now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Kind words</span>
+      <h2 class="section-title">What customers say</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">Ordered a colour sketch for my parents' anniversary. The likeness was incredible — they got emotional seeing it framed.</p>
+        <div class="testi-name-row"><span class="testi-avatar">A</span><div><div class="testi-name">Aditi</div><div class="testi-role">Mumbai</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">Super smooth process. Paid, got a WhatsApp message within minutes, and had the PDF the next evening.</p>
+        <div class="testi-name-row"><span class="testi-avatar">R</span><div><div class="testi-name">Rohit</div><div class="testi-role">Delhi</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">Got a 3-face pencil sketch of me and my siblings for our mom's birthday. She cried happy tears. Worth every rupee.</p>
+        <div class="testi-name-row"><span class="testi-avatar">S</span><div><div class="testi-name">Sneha</div><div class="testi-role">Pune</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="background:var(--paper-2);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Questions</span>
+      <h2 class="section-title">Good to know</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-btn" onclick="lsFaq(this)"><span class="faq-q">Do I need to upload my photo right now?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-inner">No. Just complete your payment — we'll message you on WhatsApp right after to collect and confirm your photo.</p></div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="lsFaq(this)"><span class="faq-q">What format will I receive?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-inner">A high-resolution, print-ready PDF sent directly on WhatsApp. You can print it at any local shop or at home.</p></div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="lsFaq(this)"><span class="faq-q">How is pricing decided?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-inner">Pricing is based on the number of faces in your photo and whether you choose pencil or colour. 3 or more faces are priced at one flat rate.</p></div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="lsFaq(this)"><span class="faq-q">How fast will I get my sketch?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-inner">Within 24 hours of us confirming your photo on WhatsApp.</p></div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="lsFaq(this)"><span class="faq-q">Can you print and frame it for me?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-inner">We deliver the digital PDF only — you print and frame it yourself, however you like.</p></div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="lsFaq(this)"><span class="faq-q">What if I'm not happy with the sketch?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-inner">Message us on WhatsApp and we'll work with you to make it right. See our refund policy for details.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>Ready to sketch a memory?</h2>
+  <p>Pick your sketch type and face count, complete payment, and send your photo on WhatsApp.</p>
+  <a href="#top" class="btn-primary" onclick="document.querySelector('.order-card').scrollIntoView({behavior:'smooth'}); return false;">Start My Sketch</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">Sketch<span>Note</span></div>
+    <p class="footer-tagline">Custom pencil & colour sketch portraits, made from your photo.</p>
+    <ul class="footer-links">
+      <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+      <li><a href="/refund-policy.html">Refund Policy</a></li>
+      <li><a href="/terms.html">Terms of Service</a></li>
+    </ul>
+    <p class="footer-contact">WhatsApp us <a href="https://wa.me/919111370819?text=Hi%20SketchNote%2C%20I%20need%20support!" target="_blank" rel="noopener noreferrer">+91 91113 70819</a></p>
+    <div class="footer-pay"><span>UPI</span><span>Google Pay</span><span>PhonePe</span><span>Paytm</span><span>Visa</span><span>Mastercard</span></div>
+    <div class="footer-divider"></div>
+    <p class="footer-copy">© <span id="yr"></span> SketchNote. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/919111370819?text=Hi%20SketchNote%2C%20I%20need%20support!" class="wa-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+    <path fill="#FFFFFF" fill-rule="evenodd" clip-rule="evenodd" d="M16.02 5.4c-5.29 0-9.6 4.3-9.6 9.6 0 1.83.51 3.55 1.4 5.02L6.34 25.4l5.55-1.46a9.55 9.55 0 004.13.95h.01c5.3 0 9.6-4.3 9.6-9.6s-4.3-9.6-9.61-9.89zm0 17.53h-.01a7.6 7.6 0 01-3.87-1.06l-.28-.16-2.88.76.77-2.81-.18-.29a7.58 7.58 0 01-1.18-4.09c0-4.21 3.42-7.63 7.63-7.63s7.63 3.42 7.63 7.63-3.42 7.65-7.63 7.65z"/>
+    <path fill="#FFFFFF" d="M12.6 9.9c-.22-.5-.45-.5-.66-.51-.17-.01-.37-.01-.56-.01-.2 0-.51.07-.78.36-.27.29-1.03 1-1.03 2.45s1.05 2.85 1.2 3.05c.15.2 2.06 3.28 5.08 4.47 2.51.99 3.02.79 3.57.74.55-.05 1.77-.72 2.02-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.56-.35-.29-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.29-.77.97-.94 1.17-.17.2-.35.22-.64.07-.29-.15-1.24-.46-2.36-1.46-.87-.78-1.46-1.74-1.63-2.03-.17-.29-.02-.45.13-.6.13-.13.29-.35.44-.52.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.51-.07-.15-.61-1.53-.86-2.09z"/>
+  </svg>
+</a>
+
+<!-- STICKY MOBILE BUY BAR -->
+<div class="sticky-bar" id="stickyBar">
+  <div class="sticky-bar-price">
+    <span class="now" id="stickyPriceNow">₹99</span>
+    <span class="was" id="stickyPriceWas">₹198</span>
+  </div>
+  <a href="#" class="sticky-bar-btn" id="stickyBuyBtn" target="_blank" rel="noopener noreferrer">Buy Now</a>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   PAYMENT LINKS — replace each with your real Cosmofeed link.
+   There are exactly 6: pencil × (1 / 2 / 3+) and colour × (1 / 2 / 3+)
+═══════════════════════════════════════════════════════ */
+var COSMOFEED_LINKS = {
+  pencil_1:      'https://pages.cosmofeed.com/s/REPLACE_WITH_PENCIL_1_FACE_LINK',
+  pencil_2:      'https://pages.cosmofeed.com/s/REPLACE_WITH_PENCIL_2_FACE_LINK',
+  pencil_3plus:  'https://pages.cosmofeed.com/s/REPLACE_WITH_PENCIL_3PLUS_FACE_LINK',
+  colour_1:      'https://pages.cosmofeed.com/s/REPLACE_WITH_COLOUR_1_FACE_LINK',
+  colour_2:      'https://pages.cosmofeed.com/s/REPLACE_WITH_COLOUR_2_FACE_LINK',
+  colour_3plus:  'https://pages.cosmofeed.com/s/REPLACE_WITH_COLOUR_3PLUS_FACE_LINK'
+};
+
+var PRICES = {
+  pencil_1:     { now: 99,  was: 198 },
+  pencil_2:     { now: 149, was: 298 },
+  pencil_3plus: { now: 199, was: 398 },
+  colour_1:     { now: 149, was: 298 },
+  colour_2:     { now: 199, was: 398 },
+  colour_3plus: { now: 249, was: 498 }
+};
+
+var FACE_LABEL = { '1': '1 Face', '2': '2 Faces', '3plus': '3+ Faces' };
+
+var state = { type: 'pencil', faces: '1' };
+
+function currentKey() { return state.type + '_' + state.faces; }
+
+function refreshOrderCard() {
+  var key = currentKey();
+  var p = PRICES[key];
+  var link = COSMOFEED_LINKS[key];
+
+  document.getElementById('priceNow').textContent = '₹' + p.now;
+  document.getElementById('priceWas').textContent = '₹' + p.was;
+  document.getElementById('buyBtnPrice').textContent = '₹' + p.now;
+
+  var badge = document.getElementById('priceBadge');
+  badge.classList.remove('stamp');
+  void badge.offsetWidth; /* restart animation */
+  badge.classList.add('stamp');
+
+  var buyBtn = document.getElementById('buyNowBtn');
+  buyBtn.setAttribute('href', link);
+
+  var stickyBtn = document.getElementById('stickyBuyBtn');
+  stickyBtn.setAttribute('href', link);
+  document.getElementById('stickyPriceNow').textContent = '₹' + p.now;
+  document.getElementById('stickyPriceWas').textContent = '₹' + p.was;
+
+  /* toggle the hero frame's colour filter to match selection */
+  var frameInner = document.getElementById('heroFrameInner');
+  frameInner.classList.toggle('is-pencil', state.type === 'pencil');
+  frameInner.classList.toggle('is-colour', state.type === 'colour');
+}
+
+document.querySelectorAll('#typePills .variant-pill').forEach(function(pill) {
+  pill.addEventListener('click', function() {
+    document.querySelectorAll('#typePills .variant-pill').forEach(function(p) { p.classList.remove('active'); });
+    pill.classList.add('active');
+    state.type = pill.getAttribute('data-type');
+    refreshOrderCard();
+  });
+});
+
+document.querySelectorAll('#facePills .variant-pill').forEach(function(pill) {
+  pill.addEventListener('click', function() {
+    document.querySelectorAll('#facePills .variant-pill').forEach(function(p) { p.classList.remove('active'); });
+    pill.classList.add('active');
+    state.faces = pill.getAttribute('data-faces');
+    refreshOrderCard();
+  });
+});
+
+/* Pricing-grid "Buy now" buttons jump straight to the matching link */
+document.querySelectorAll('.pc-btn').forEach(function(btn) {
+  var key = btn.getAttribute('data-buy');
+  btn.setAttribute('href', COSMOFEED_LINKS[key]);
+  btn.setAttribute('target', '_blank');
+  btn.setAttribute('rel', 'noopener noreferrer');
+});
+
+function lsSwitchPriceTab(tab) {
+  document.getElementById('ptabPencil').classList.toggle('active', tab === 'pencil');
+  document.getElementById('ptabColour').classList.toggle('active', tab === 'colour');
+  document.getElementById('pricingGridPencil').classList.toggle('hidden', tab !== 'pencil');
+  document.getElementById('pricingGridColour').classList.toggle('hidden', tab !== 'colour');
+}
+
+/* ═══════════════════════════════════════════════════════
+   DUMMY PHOTO UPLOAD
+   Purely client-side preview. Nothing is uploaded or sent
+   anywhere — no fetch, no server, no storage. The chosen
+   file only ever exists as a local object URL in the
+   customer's own browser tab, and is discarded on refresh.
+   This exists purely so the customer feels like their photo
+   is already "in progress" before we collect it for real on
+   WhatsApp after payment.
+═══════════════════════════════════════════════════════ */
+var fileInput = document.getElementById('sketchFileInput');
+fileInput.addEventListener('change', function() {
+  var file = fileInput.files && fileInput.files[0];
+  if (!file) return;
+
+  var box = document.getElementById('uploadBox');
+  var icon = document.getElementById('uploadIcon');
+  var title = document.getElementById('uploadTitle');
+  var sub = document.getElementById('uploadSub');
+  var progress = document.getElementById('uploadProgress');
+  var fill = document.getElementById('uploadProgressFill');
+
+  var localUrl = URL.createObjectURL(file); /* local only, never sent anywhere */
+  icon.innerHTML = '<img src="' + localUrl + '" alt="">';
+  title.textContent = 'Uploading…';
+  sub.textContent = file.name;
+  progress.classList.add('show');
+  fill.style.width = '0%';
+
+  requestAnimationFrame(function() {
+    setTimeout(function() { fill.style.width = '100%'; }, 50);
+  });
+
+  setTimeout(function() {
+    box.classList.add('done');
+    title.textContent = 'Uploaded successfully!';
+    sub.textContent = "We'll confirm this photo with you on WhatsApp after payment.";
+    box.onclick = null;
+  }, 1300);
+});
+
+/* ═══════════════════════════════════════════════════════
+   GALLERY CAROUSEL
+═══════════════════════════════════════════════════════ */
+(function() {
+  var track = document.getElementById('galleryTrack');
+  var dotsEl = document.getElementById('galleryDots');
+  var slides = track.querySelectorAll('.gallery-slide');
+  var total = slides.length, cur = 0, timer;
+
+  for (var i = 0; i < total; i++) {
+    (function(idx) {
+      var d = document.createElement('button');
+      d.className = 'gdot' + (idx === 0 ? ' active' : '');
+      d.onclick = function() { goTo(idx); resetTimer(); };
+      dotsEl.appendChild(d);
+    })(i);
+  }
+
+  function goTo(n) {
+    cur = (n + total) % total;
+    track.style.transform = 'translateX(-' + (cur * 100) + '%)';
+    dotsEl.querySelectorAll('.gdot').forEach(function(d, i) { d.classList.toggle('active', i === cur); });
+  }
+  function resetTimer() { clearInterval(timer); timer = setInterval(function() { goTo(cur + 1); }, 4200); }
+
+  document.getElementById('galPrev').onclick = function() { goTo(cur - 1); resetTimer(); };
+  document.getElementById('galNext').onclick = function() { goTo(cur + 1); resetTimer(); };
+  resetTimer();
+})();
+
+/* FAQ accordion */
+function lsFaq(btn) {
+  var item = btn.closest('.faq-item');
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el) { el.classList.remove('open'); });
+  if (!isOpen) item.classList.add('open');
+}
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+refreshOrderCard();
+</script>
+</body>
+</html>

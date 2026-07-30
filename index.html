@@ -8,6 +8,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1617839133135131');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1617839133135131&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
 <style>
 :root {
   --paper:        #FAF6EE;
@@ -727,6 +744,19 @@ var state = { type: 'pencil', faces: '1' };
 
 function currentKey() { return state.type + '_' + state.faces; }
 
+/* Fires Meta Pixel InitiateCheckout right as someone taps a Buy button.
+   All buy links open in a new tab (target="_blank"), so this fires safely
+   without racing against page navigation in the current tab. */
+function lsTrackCheckout(key) {
+  if (typeof fbq === 'function' && PRICES[key]) {
+    fbq('track', 'InitiateCheckout', {
+      value: PRICES[key].now,
+      currency: 'INR',
+      content_name: key
+    });
+  }
+}
+
 function refreshOrderCard() {
   var key = currentKey();
   var p = PRICES[key];
@@ -743,9 +773,11 @@ function refreshOrderCard() {
 
   var buyBtn = document.getElementById('buyNowBtn');
   buyBtn.setAttribute('href', link);
+  buyBtn.setAttribute('data-key', key);
 
   var stickyBtn = document.getElementById('stickyBuyBtn');
   stickyBtn.setAttribute('href', link);
+  stickyBtn.setAttribute('data-key', key);
   document.getElementById('stickyPriceNow').textContent = '₹' + p.now;
   document.getElementById('stickyPriceWas').textContent = '₹' + p.was;
 
@@ -754,6 +786,13 @@ function refreshOrderCard() {
   frameInner.classList.toggle('is-pencil', state.type === 'pencil');
   frameInner.classList.toggle('is-colour', state.type === 'colour');
 }
+
+document.getElementById('buyNowBtn').addEventListener('click', function() {
+  lsTrackCheckout(this.getAttribute('data-key'));
+});
+document.getElementById('stickyBuyBtn').addEventListener('click', function() {
+  lsTrackCheckout(this.getAttribute('data-key'));
+});
 
 document.querySelectorAll('#typePills .variant-pill').forEach(function(pill) {
   pill.addEventListener('click', function() {
@@ -779,6 +818,7 @@ document.querySelectorAll('.pc-btn').forEach(function(btn) {
   btn.setAttribute('href', COSMOFEED_LINKS[key]);
   btn.setAttribute('target', '_blank');
   btn.setAttribute('rel', 'noopener noreferrer');
+  btn.addEventListener('click', function() { lsTrackCheckout(key); });
 });
 
 function lsSwitchPriceTab(tab) {

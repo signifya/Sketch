@@ -134,21 +134,14 @@ a { color: inherit; }
 /* Framed sketch mockup */
 .hero-art { position: relative; display: flex; align-items: center; justify-content: center; }
 .frame {
-  background: linear-gradient(155deg, #D9B98C, #C8A06C 65%, #B08A50);
-  padding: 16px; border-radius: 10px; box-shadow: 0 30px 70px -20px rgba(120,90,50,0.45);
-  width: min(360px, 100%); transform: rotate(-2deg);
+  background: #3B2A1D;
+  padding: 5px; border-radius: 6px; box-shadow: 0 30px 70px -20px rgba(59,42,29,0.5);
+  width: min(340px, 100%); transform: rotate(-2deg);
   animation: lsFrameFloat 4.5s ease-in-out infinite;
 }
 @keyframes lsFrameFloat { 0%,100% { transform: rotate(-2deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-10px); } }
-.frame-inner { background: var(--card); border-radius: 4px; padding: 10px; position: relative; overflow: hidden; }
-.frame-inner img { width: 100%; height: auto; display: block; border-radius: 2px; }
-.frame-caption { font-family: var(--font-hand); font-size: 17px; color: var(--ink-mid); text-align: center; margin-top: 10px; }
-.frame-badge {
-  position: absolute; top: -14px; right: -14px; background: var(--crimson); color: #fff;
-  width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-weight: 700; font-size: 12px; text-align: center; line-height: 1.2;
-  box-shadow: var(--shadow-lift); transform: rotate(8deg);
-}
+.frame-inner { background: var(--card); border-radius: 2px; padding: 8px; position: relative; overflow: hidden; }
+.frame-inner img { width: 100%; height: auto; display: block; border-radius: 1px; }
 
 /* ══════ ORDER CARD ══════ */
 .order-wrap { max-width: 1120px; margin: -60px auto 0; padding: 0 20px; position: relative; z-index: 5; }
@@ -394,9 +387,7 @@ a { color: inherit; }
     <div class="hero-art">
       <div class="frame">
         <div class="frame-inner" id="heroFrameInner">
-          <div class="frame-badge">24 HR<br>DELIVERY</div>
-          <img src="images/hero-sample.jpg" alt="A real pencil sketch portrait, framed and gifted by a customer">
-          <p class="frame-caption">✏️ real sketch, real customer</p>
+          <img src="images/hero-sample.jpg" alt="A real colour sketch portrait, framed and gifted by a customer">
         </div>
       </div>
     </div>
@@ -494,8 +485,7 @@ a { color: inherit; }
     </div>
     <div class="gallery-outer reveal">
       <div class="gallery-track" id="galleryTrack">
-        <!-- Replace each src below with your own showcase image (6 total) -->
-        <div class="gallery-slide"><img src="images/sketch-1.jpg" alt="Sketch sample 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🖼️</div><p>Add sketch-1.jpg to /images</p></div><span class="gallery-tag">Pencil Sketch</span></div>
+        <!-- Replace each src below with your own showcase image (5 total) -->
         <div class="gallery-slide"><img src="images/sketch-2.jpg" alt="Sketch sample 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🖼️</div><p>Add sketch-2.jpg to /images</p></div><span class="gallery-tag">Pencil Sketch</span></div>
         <div class="gallery-slide"><img src="images/sketch-3.jpg" alt="Sketch sample 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🖼️</div><p>Add sketch-3.jpg to /images</p></div><span class="gallery-tag">Pencil Sketch</span></div>
         <div class="gallery-slide"><img src="images/sketch-4.jpg" alt="Sketch sample 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🖼️</div><p>Add sketch-4.jpg to /images</p></div><span class="gallery-tag">Pencil Sketch</span></div>
@@ -506,6 +496,30 @@ a { color: inherit; }
       <button class="gallery-arrow next" id="galNext" aria-label="Next">›</button>
     </div>
     <div class="gallery-dots" id="galleryDots"></div>
+  </div>
+</section>
+
+<!-- COLOUR GALLERY -->
+<section class="section" id="colourGallery" style="background:var(--paper-2);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Colour work</span>
+      <h2 class="section-title">Prefer it in colour?</h2>
+      <p class="section-sub">The same warmth, brought to life with full colour.</p>
+    </div>
+    <div class="gallery-outer reveal">
+      <div class="gallery-track" id="colourGalleryTrack">
+        <!-- Replace each src below with your own colour showcase image (5 total) -->
+        <div class="gallery-slide"><img src="images/colour-1.jpg" alt="Colour sketch sample 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🎨</div><p>Add colour-1.jpg to /images</p></div><span class="gallery-tag">Colour Sketch</span></div>
+        <div class="gallery-slide"><img src="images/colour-2.jpg" alt="Colour sketch sample 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🎨</div><p>Add colour-2.jpg to /images</p></div><span class="gallery-tag">Colour Sketch</span></div>
+        <div class="gallery-slide"><img src="images/colour-3.jpg" alt="Colour sketch sample 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🎨</div><p>Add colour-3.jpg to /images</p></div><span class="gallery-tag">Colour Sketch</span></div>
+        <div class="gallery-slide"><img src="images/colour-4.jpg" alt="Colour sketch sample 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🎨</div><p>Add colour-4.jpg to /images</p></div><span class="gallery-tag">Colour Sketch</span></div>
+        <div class="gallery-slide"><img src="images/colour-5.jpg" alt="Colour sketch sample 5" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="gplaceholder" style="display:none;"><div class="gplaceholder-disc">🎨</div><p>Add colour-5.jpg to /images</p></div><span class="gallery-tag">Colour Sketch</span></div>
+      </div>
+      <button class="gallery-arrow prev" id="colourGalPrev" aria-label="Previous">‹</button>
+      <button class="gallery-arrow next" id="colourGalNext" aria-label="Next">›</button>
+    </div>
+    <div class="gallery-dots" id="colourGalleryDots"></div>
   </div>
 </section>
 
@@ -834,11 +848,13 @@ fileInput.addEventListener('change', function() {
 });
 
 /* ═══════════════════════════════════════════════════════
-   GALLERY CAROUSEL
+   GALLERY CAROUSEL (reusable — powers both the pencil and
+   colour sketch galleries)
 ═══════════════════════════════════════════════════════ */
-(function() {
-  var track = document.getElementById('galleryTrack');
-  var dotsEl = document.getElementById('galleryDots');
+function lsInitGalleryCarousel(trackId, dotsId, prevId, nextId) {
+  var track = document.getElementById(trackId);
+  var dotsEl = document.getElementById(dotsId);
+  if (!track || !dotsEl) return;
   var slides = track.querySelectorAll('.gallery-slide');
   var total = slides.length, cur = 0, timer;
 
@@ -858,10 +874,15 @@ fileInput.addEventListener('change', function() {
   }
   function resetTimer() { clearInterval(timer); timer = setInterval(function() { goTo(cur + 1); }, 4200); }
 
-  document.getElementById('galPrev').onclick = function() { goTo(cur - 1); resetTimer(); };
-  document.getElementById('galNext').onclick = function() { goTo(cur + 1); resetTimer(); };
+  var prevBtn = document.getElementById(prevId);
+  var nextBtn = document.getElementById(nextId);
+  if (prevBtn) prevBtn.onclick = function() { goTo(cur - 1); resetTimer(); };
+  if (nextBtn) nextBtn.onclick = function() { goTo(cur + 1); resetTimer(); };
   resetTimer();
-})();
+}
+
+lsInitGalleryCarousel('galleryTrack', 'galleryDots', 'galPrev', 'galNext');
+lsInitGalleryCarousel('colourGalleryTrack', 'colourGalleryDots', 'colourGalPrev', 'colourGalNext');
 
 /* FAQ accordion */
 function lsFaq(btn) {
